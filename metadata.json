@@ -1,0 +1,6 @@
+{
+  "name": "PGRI Cabang Kec. Ciamis - Ranting SMPN 2 Ciamis",
+  "description": "Portal Resmi PGRI Cabang Kecamatan Ciamis Ranting SMPN 2 Ciamis: Inovasi SAKTI, Pembelajaran Mendalam, PID, Koding, dan Ekosistem Digital Ciamis Tangguh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

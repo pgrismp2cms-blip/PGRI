@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Authentic PGRI Batik Kusuma Bangsa Background Motifs (2% Opacity / Transparan 2% - 0.02) */
+.bg-batik-pgri-pattern {
+  background-color: #ffffff;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(185, 28, 28, 0.01) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23111827' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='M60 0 C65 15 75 25 90 30 C75 35 65 45 60 60 C55 45 45 35 30 30 C45 25 55 15 60 0 Z'/%3E%3Cpath d='M0 60 C5 75 15 85 30 90 C15 95 5 105 0 120 C-5 105 -15 95 -30 90 C-15 85 -5 75 0 60 Z'/%3E%3Cpath d='M120 60 C125 75 135 85 150 90 C135 95 125 105 120 120 C115 105 105 95 90 90 C105 85 115 75 120 60 Z'/%3E%3Ccircle cx='60' cy='60' r='6' fill='%23b91c1c' fill-opacity='0.02'/%3E%3Cpath d='M60 50 L63 57 L70 60 L63 63 L60 70 L57 63 L50 60 L57 57 Z' fill='%23111827' fill-opacity='0.02'/%3E%3Cpath d='M10 10 L15 15 M20 20 L25 25 M110 10 L105 15 M100 20 L95 25 M10 110 L15 105 M20 100 L25 95 M110 110 L105 105 M100 100 L95 95' stroke='%23111827' stroke-width='1.2' stroke-opacity='0.02'/%3E%3Ccircle cx='0' cy='0' r='12' fill='none' stroke='%23111827' stroke-width='0.8' stroke-opacity='0.02'/%3E%3Ccircle cx='120' cy='0' r='12' fill='none' stroke='%23111827' stroke-width='0.8' stroke-opacity='0.02'/%3E%3Ccircle cx='0' cy='120' r='12' fill='none' stroke='%23111827' stroke-width='0.8' stroke-opacity='0.02'/%3E%3Ccircle cx='120' cy='120' r='12' fill='none' stroke='%23111827' stroke-width='0.8' stroke-opacity='0.02'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.bg-batik-pgri-dark {
+  background-color: #0f172a;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(185, 28, 28, 0.03) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='M60 0 C65 15 75 25 90 30 C75 35 65 45 60 60 C55 45 45 35 30 30 C45 25 55 15 60 0 Z'/%3E%3Ccircle cx='60' cy='60' r='8' fill='%23ef4444' fill-opacity='0.02'/%3E%3Cpath d='M60 48 L64 56 L72 60 L64 64 L60 72 L56 64 L48 60 L56 56 Z' fill='%23ffffff' fill-opacity='0.02'/%3E%3Ccircle cx='0' cy='0' r='14' fill='none' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.02'/%3E%3Ccircle cx='120' cy='0' r='14' fill='none' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.02'/%3E%3Ccircle cx='0' cy='120' r='14' fill='none' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.02'/%3E%3Ccircle cx='120' cy='120' r='12' fill='none' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.02'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.bg-batik-pgri-red {
+  background-color: #991b1b;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.10) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02' fill-rule='evenodd'%3E%3Cpath d='M60 0 C65 15 75 25 90 30 C75 35 65 45 60 60 C55 45 45 35 30 30 C45 25 55 15 60 0 Z'/%3E%3Ccircle cx='60' cy='60' r='7' fill='%23ffffff' fill-opacity='0.02'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Leaflet Map Custom Stying for Mobile & Desktop */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 10;
+  touch-action: pan-x pan-y;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  overflow: hidden;
+  max-width: calc(100vw - 32px);
+}
+.leaflet-popup-content {
+  margin: 0;
+  line-height: 1.4;
+  max-width: 100%;
+}
+
+
