@@ -88,7 +88,16 @@ export const KontakSection: React.FC<KontakSectionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Details & Location (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-neutral-50 rounded-2xl p-6 sm:p-8 border border-neutral-200 space-y-6">
+            <div className="bg-neutral-50 rounded-2xl p-6 sm:p-8 border border-neutral-200 space-y-6 overflow-hidden">
+              {contactInfo.officePhoto && (
+                <div className="rounded-xl overflow-hidden border border-neutral-200 -mt-2 -mx-2 mb-2">
+                  <img
+                    src={contactInfo.officePhoto}
+                    alt={contactInfo.officeName}
+                    className="w-full h-44 object-cover hover:scale-102 transition-transform duration-300"
+                  />
+                </div>
+              )}
               <h3 className="text-lg font-bold text-neutral-900 pb-2 border-b border-neutral-200">
                 Informasi Kontak Resmi
               </h3>

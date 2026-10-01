@@ -107,7 +107,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="lg:col-span-5">
             <div className="relative rounded-2xl overflow-hidden shadow-xl border border-neutral-200 bg-neutral-100 group">
               <img
-                src={ASSETS.heroBanner}
+                src={heroData.heroBanner || ASSETS.heroBanner}
                 alt="Pembelajaran Digital Interaktif PID di SMPN 2 Ciamis"
                 className="w-full aspect-4/3 sm:aspect-16/10 lg:aspect-4/3 object-cover group-hover:scale-102 transition-transform duration-500"
                 referrerPolicy="no-referrer"

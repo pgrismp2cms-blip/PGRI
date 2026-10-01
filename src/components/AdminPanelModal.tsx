@@ -39,6 +39,8 @@ import {
   ContributorTeacher,
   ContactInfo
 } from '../types';
+import { ImageUploadField } from './ImageUploadField';
+import { uploadImageToServer } from '../utils/imageUpload';
 
 interface AdminPanelModalProps {
   isOpen: boolean;
@@ -658,92 +660,40 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                         <h5 className="font-bold text-sm text-neutral-900">Pengaturan Upload Logo Header Website</h5>
                       </div>
                       <span className="text-[10px] bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded">
-                        Tampil di Navigasi Atas
+                        Tampil Statis di Semua Perangkat
                       </span>
                     </div>
 
-                    {/* Preview of Header Logo */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 bg-white p-3.5 rounded-xl border border-neutral-200">
-                      <div className="flex items-center space-x-3 shrink-0">
-                        <div className="w-14 h-14 rounded-xl bg-neutral-100 border border-neutral-200 flex items-center justify-center p-1 overflow-hidden shadow-xs">
-                          {tempHero.headerLogo ? (
-                            <img
-                              src={tempHero.headerLogo}
-                              alt="Preview Logo Header"
-                              className="max-h-full max-w-full object-contain"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-lg bg-red-700 text-white flex items-center justify-center font-bold text-lg">
-                              P
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                            Pratinjau Logo Header
-                          </span>
-                          <div className="font-bold text-sm text-neutral-900">
-                            {tempHero.headerLogo ? 'Logo Kustom Aktif' : 'Lambang Standar (Inisial P)'}
-                          </div>
-                          <div className="text-[11px] text-neutral-500">
-                            Format: PNG, JPG, SVG, WebP (Rasio 1:1 atau vertikal)
-                          </div>
-                        </div>
-                      </div>
+                    <div className="space-y-4">
+                      {/* Logo Utama Header */}
+                      <ImageUploadField
+                        label="Logo Utama Header (Logo PGRI / Instansi)"
+                        value={tempHero.headerLogo || ''}
+                        onChange={(url) => setTempHero({ ...tempHero, headerLogo: url })}
+                        aspectRatio="square"
+                        description="Format PNG transparan / SVG disarankan"
+                        placeholder="https://... atau klik upload berkas"
+                      />
 
-                      {tempHero.headerLogo && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setTempHero((prev) => ({ ...prev, headerLogo: '' }));
-                            showToast('Logo dihapus, kembali ke inisial standar.');
-                          }}
-                          className="sm:ml-auto text-xs text-red-600 hover:text-red-800 font-semibold px-2 py-1 rounded hover:bg-red-50"
-                        >
-                          Hapus Logo
-                        </button>
-                      )}
-                    </div>
+                      {/* Logo Sekunder Sekolah */}
+                      <ImageUploadField
+                        label="Logo Sekunder (Logo SMPN 2 Ciamis / Satuan Pendidikan)"
+                        value={tempHero.headerLogoSecondary || ''}
+                        onChange={(url) => setTempHero({ ...tempHero, headerLogoSecondary: url })}
+                        aspectRatio="square"
+                        description="Opsional: Tampil berdampingan dengan logo utama"
+                        placeholder="https://... atau klik upload berkas"
+                      />
 
-                    {/* File Upload Input & URL Input */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {/* Upload from Device */}
-                      <div className="space-y-1.5">
-                        <label className="font-semibold text-neutral-700 text-xs flex items-center space-x-1.5">
-                          <Upload className="w-3.5 h-3.5 text-neutral-500" />
-                          <span>Upload File Logo (Komputer / HP)</span>
-                        </label>
-                        <label className="flex flex-col items-center justify-center border-2 border-dashed border-neutral-300 hover:border-red-500 rounded-xl p-3 cursor-pointer bg-white transition-colors text-center group">
-                          <Upload className="w-5 h-5 text-neutral-400 group-hover:text-red-600 mb-1" />
-                          <span className="text-xs font-semibold text-neutral-700 group-hover:text-red-700">
-                            Pilih Berkas Logo Baru
-                          </span>
-                          <span className="text-[10px] text-neutral-400 mt-0.5">Maks. 2.5 MB (PNG transparan disarankan)</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) => handleLogoUpload(e, false)}
-                          />
-                        </label>
-                      </div>
-
-                      {/* Direct URL Input */}
-                      <div className="space-y-1.5">
-                        <label className="font-semibold text-neutral-700 text-xs">
-                          Atau Tautan / URL Gambar Logo
-                        </label>
-                        <input
-                          type="url"
-                          value={tempHero.headerLogo || ''}
-                          onChange={(e) => setTempHero({ ...tempHero, headerLogo: e.target.value })}
-                          placeholder="https://.../logo.png"
-                          className="w-full p-2.5 bg-white border border-neutral-300 rounded-lg text-xs focus:outline-none focus:border-red-600"
-                        />
-                        <div className="text-[10px] text-neutral-400">
-                          Masukkan URL file logo online yang valid.
-                        </div>
-                      </div>
+                      {/* Banner Utama Beranda */}
+                      <ImageUploadField
+                        label="Gambar Banner Utama Hero Beranda"
+                        value={tempHero.heroBanner || ''}
+                        onChange={(url) => setTempHero({ ...tempHero, heroBanner: url })}
+                        aspectRatio="video"
+                        description="Banner resolusi tinggi di halaman depan (rasio 16:9 disarankan)"
+                        placeholder="https://... atau klik upload berkas"
+                      />
                     </div>
 
                     {/* Preset 1-Klik */}
@@ -792,7 +742,7 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                         <button
                           type="button"
                           onClick={() => {
-                            setTempHero((prev) => ({ ...prev, headerLogo: '' }));
+                            setTempHero((prev) => ({ ...prev, headerLogo: '', headerLogoSecondary: '' }));
                             showToast('Logo direset ke inisial standar.');
                           }}
                           className="px-2.5 py-1 text-[11px] bg-neutral-100 hover:bg-neutral-200 border border-neutral-300 rounded-lg text-neutral-600 font-medium transition-colors"
@@ -1019,6 +969,32 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                           value={editingSakti.description}
                           onChange={(e) => setEditingSakti({ ...editingSakti, description: e.target.value })}
                           className="w-full p-2 bg-white border border-neutral-300 rounded-lg"
+                        />
+                      </div>
+
+                      {/* Image Upload: Visual Utama & Avatar Penulis */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <ImageUploadField
+                          label="Gambar Visual Sampul Inovasi SAKTI"
+                          value={editingSakti.image}
+                          onChange={(url) => setEditingSakti({ ...editingSakti, image: url })}
+                          aspectRatio="video"
+                          description="Rasio 16:9 disarankan"
+                          placeholder="https://... atau klik upload gambar"
+                        />
+
+                        <ImageUploadField
+                          label="Foto Profil Penulis / Guru Pengampu"
+                          value={editingSakti.author.avatar}
+                          onChange={(url) =>
+                            setEditingSakti({
+                              ...editingSakti,
+                              author: { ...editingSakti.author, avatar: url },
+                            })
+                          }
+                          aspectRatio="square"
+                          description="Pasfoto atau profil persegi"
+                          placeholder="https://... atau klik upload gambar"
                         />
                       </div>
 
@@ -1283,6 +1259,16 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                           className="w-full p-2 bg-white border border-neutral-300 rounded-lg"
                         />
                       </div>
+
+                      {/* Image Upload: Foto / Dokumentasi Praktik Baik STAR */}
+                      <ImageUploadField
+                        label="Foto / Visual Utama Praktik Baik STAR"
+                        value={editingStar.image}
+                        onChange={(url) => setEditingStar({ ...editingStar, image: url })}
+                        aspectRatio="video"
+                        description="Foto aksi nyata di kelas atau sekolah"
+                        placeholder="https://... atau klik upload gambar"
+                      />
 
                       {/* STAR 4 Pillars Fields */}
                       <div className="space-y-3 pt-2 border-t border-neutral-200">
@@ -1613,15 +1599,14 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                               />
                             </div>
 
-                            <div className="space-y-1 md:col-span-2">
-                              <label className="font-semibold text-neutral-700">Tautan Gambar / Foto Dokumentasi</label>
-                              <input
-                                type="url"
-                                required
+                            <div className="md:col-span-2">
+                              <ImageUploadField
+                                label="Foto Dokumentasi Kegiatan Komunitas / Kombel"
                                 value={editingKomunitas.image}
-                                onChange={(e) => setEditingKomunitas({ ...editingKomunitas, image: e.target.value })}
-                                className="w-full p-2 bg-white border border-neutral-300 rounded-lg"
-                                placeholder="https://..."
+                                onChange={(url) => setEditingKomunitas({ ...editingKomunitas, image: url })}
+                                aspectRatio="video"
+                                description="Foto dokumentasi kegiatan atau workshop"
+                                placeholder="https://... atau klik upload gambar"
                               />
                             </div>
 
@@ -1808,15 +1793,14 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                               />
                             </div>
 
-                            <div className="space-y-1">
-                              <label className="font-semibold text-neutral-700">URL Foto Profil / Avatar</label>
-                              <input
-                                type="url"
-                                required
+                            <div className="md:col-span-2">
+                              <ImageUploadField
+                                label="Foto Profil / Pasfoto Guru Penulis Kontributor"
                                 value={editingContributor.avatar}
-                                onChange={(e) => setEditingContributor({ ...editingContributor, avatar: e.target.value })}
-                                className="w-full p-2 bg-white border border-neutral-300 rounded-lg"
-                                placeholder="https://..."
+                                onChange={(url) => setEditingContributor({ ...editingContributor, avatar: url })}
+                                aspectRatio="square"
+                                description="Pasfoto atau foto profil persegi"
+                                placeholder="https://... atau klik upload gambar"
                               />
                             </div>
 
@@ -2099,6 +2083,16 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                         </div>
                       </div>
 
+                      {/* Foto Gedung / Lingkungan Sekolah */}
+                      <ImageUploadField
+                        label="Foto Gedung / Gerbang Sekolah Basis Ranting"
+                        value={editingSchool.image || ''}
+                        onChange={(url) => setEditingSchool({ ...editingSchool, image: url })}
+                        aspectRatio="video"
+                        description="Foto tampak depan sekolah untuk peta interaktif"
+                        placeholder="https://... atau klik upload gambar"
+                      />
+
                       <div className="flex justify-end space-x-2 pt-2">
                         <button
                           type="button"
@@ -2310,6 +2304,16 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                           </div>
                         </div>
 
+                        {/* Foto Profil / Pasfoto Pengurus */}
+                        <ImageUploadField
+                          label="Foto Profil / Pasfoto Resmi Pengurus"
+                          value={editingPengurus.image}
+                          onChange={(url) => setEditingPengurus({ ...editingPengurus, image: url })}
+                          aspectRatio="square"
+                          description="Pasfoto resmi atau foto profil pengurus"
+                          placeholder="https://... atau klik upload gambar"
+                        />
+
                         <div className="flex justify-end space-x-2 pt-2">
                           <button
                             type="button"
@@ -2469,16 +2473,15 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                         </div>
                       </div>
 
-                      <div className="space-y-1">
-                        <label className="font-semibold text-neutral-700">URL Gambar (Foto HD)</label>
-                        <input
-                          type="text"
-                          required
-                          value={editingGallery.image}
-                          onChange={(e) => setEditingGallery({ ...editingGallery, image: e.target.value })}
-                          className="w-full p-2 bg-white border border-neutral-300 rounded-lg"
-                        />
-                      </div>
+                      {/* Image Upload: Foto HD Dokumentasi Galeri */}
+                      <ImageUploadField
+                        label="Foto HD Dokumentasi Galeri Kegiatan PGRI"
+                        value={editingGallery.image}
+                        onChange={(url) => setEditingGallery({ ...editingGallery, image: url })}
+                        aspectRatio="video"
+                        description="Foto kegiatan format JPG, PNG, atau WebP"
+                        placeholder="https://... atau klik upload gambar"
+                      />
 
                       <div className="space-y-1">
                         <label className="font-semibold text-neutral-700">Deskripsi / Keterangan Foto</label>
@@ -2709,6 +2712,17 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                         onChange={(e) => setTempContact({ ...tempContact, mapEmbedUrl: e.target.value })}
                         className="w-full p-2.5 bg-neutral-50 border border-neutral-300 rounded-lg focus:outline-none focus:border-red-600"
                         placeholder="https://maps.google.com/..."
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <ImageUploadField
+                        label="Foto Gedung / Kantor Sekretariat PGRI"
+                        value={tempContact.officePhoto || ''}
+                        onChange={(url) => setTempContact({ ...tempContact, officePhoto: url })}
+                        aspectRatio="video"
+                        description="Foto kantor sekretariat yang tampil di halaman kontak dan kartu informasi"
+                        placeholder="https://... atau klik upload berkas"
                       />
                     </div>
                   </div>

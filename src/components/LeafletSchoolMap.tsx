@@ -114,6 +114,7 @@ export const LeafletSchoolMap: React.FC<LeafletSchoolMapProps> = ({
       // Popup content
       const popupHtml = `
         <div style="width: 250px; max-width: calc(100vw - 64px); font-family: 'Plus Jakarta Sans', sans-serif; padding: 10px 12px; color: #1e293b; box-sizing: border-box;">
+          ${school.image ? `<img src="${school.image}" alt="${school.name}" style="width: 100%; height: 95px; object-fit: cover; border-radius: 6px; margin-bottom: 6px;" />` : ''}
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
             <span style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: ${isPusat ? '#b91c1c' : '#475569'};">
               ${isPusat ? '★ Ranting Pusat PGRI' : `Jenjang ${school.jenjang}`}
@@ -266,6 +267,15 @@ export const LeafletSchoolMap: React.FC<LeafletSchoolMapProps> = ({
         <div className="lg:col-span-4 space-y-4">
           {/* Active School Profile Card */}
           <div className="bg-white rounded-2xl p-5 border border-neutral-200 shadow-xs space-y-4">
+            {selectedSchool.image && (
+              <div className="rounded-xl overflow-hidden border border-neutral-200 -mt-1 -mx-1 mb-2">
+                <img
+                  src={selectedSchool.image}
+                  alt={selectedSchool.name}
+                  className="w-full h-36 object-cover hover:scale-102 transition-transform duration-300"
+                />
+              </div>
+            )}
             <div className="pb-3 border-b border-neutral-200">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase font-bold text-red-700 tracking-wider">

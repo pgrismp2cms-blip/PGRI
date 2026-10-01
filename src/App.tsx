@@ -40,6 +40,11 @@ import {
   GALLERY_ITEMS,
   INITIAL_MESSAGES,
 } from './data/mockData';
+import {
+  fetchSharedContent,
+  saveSharedContent,
+  resetSharedContent,
+} from './utils/contentSync';
 
 function getSaved<T>(key: string, fallback: T): T {
   try {
@@ -97,55 +102,67 @@ export default function App() {
   const [starModalPractice, setStarModalPractice] = useState<StarPractice | null>(null);
   const [galleryModalItem, setGalleryModalItem] = useState<GalleryItem | null>(null);
 
-  // Persistence helpers
+  // Persistence & Server-Sync helpers (updates local storage and broadcasts to server for all devices)
   const setHeroDataWithPersist = (data: HeroContent) => {
     setHeroData(data);
     localStorage.setItem('pgri_hero_data', JSON.stringify(data));
+    saveSharedContent({ heroData: data });
   };
   const setSaktiWithPersist = (articles: SaktiContent[]) => {
     setSaktiArticles(articles);
     localStorage.setItem('pgri_sakti_data', JSON.stringify(articles));
+    saveSharedContent({ saktiArticles: articles });
   };
   const setStarWithPersist = (practices: StarPractice[]) => {
     setStarPractices(practices);
     localStorage.setItem('pgri_star_data', JSON.stringify(practices));
+    saveSharedContent({ starPractices: practices });
   };
   const setRantingWithPersist = (schools: RantingSchool[]) => {
     setRantingList(schools);
     localStorage.setItem('pgri_ranting_data', JSON.stringify(schools));
+    saveSharedContent({ rantingList: schools });
   };
   const setPengurusWithPersist = (pengurus: PengurusItem[]) => {
     setPengurusList(pengurus);
     localStorage.setItem('pgri_pengurus_data', JSON.stringify(pengurus));
+    saveSharedContent({ pengurusList: pengurus });
   };
   const setKomunitasWithPersist = (activities: KomunitasActivity[]) => {
     setKomunitasActivities(activities);
     localStorage.setItem('pgri_komunitas_data', JSON.stringify(activities));
+    saveSharedContent({ komunitasActivities: activities });
   };
   const setContributorsWithPersist = (teachers: ContributorTeacher[]) => {
     setContributorTeachers(teachers);
     localStorage.setItem('pgri_teachers_data', JSON.stringify(teachers));
+    saveSharedContent({ contributorTeachers: teachers });
   };
   const setGalleryWithPersist = (items: GalleryItem[]) => {
     setGalleryItems(items);
     localStorage.setItem('pgri_gallery_data', JSON.stringify(items));
+    saveSharedContent({ galleryItems: items });
   };
   const setOrgWithPersist = (data: { sejarah: string; visi: string; misi: string[] }) => {
     setOrganizationData(data);
     localStorage.setItem('pgri_org_data', JSON.stringify(data));
+    saveSharedContent({ organizationData: data });
   };
   const setContactWithPersist = (info: ContactInfo) => {
     setContactInfo(info);
     localStorage.setItem('pgri_contact_data', JSON.stringify(info));
+    saveSharedContent({ contactInfo: info });
   };
   const setMessagesWithPersist = (msgs: ContactMessage[]) => {
     setMessages(msgs);
     localStorage.setItem('pgri_messages_data', JSON.stringify(msgs));
+    saveSharedContent({ messages: msgs });
   };
   const handleNewMessage = (msg: ContactMessage) => {
     const updated = [msg, ...messages];
     setMessages(updated);
     localStorage.setItem('pgri_messages_data', JSON.stringify(updated));
+    saveSharedContent({ messages: updated });
   };
 
   const handleResetAllData = () => {
@@ -172,7 +189,76 @@ export default function App() {
     setGalleryItems(GALLERY_ITEMS);
     setContactInfo(DEFAULT_CONTACT_INFO);
     setMessages(INITIAL_MESSAGES);
+
+    resetSharedContent();
   };
+
+  // Cross-device synchronization: Fetch server content on mount, focus, and every 15 seconds
+  useEffect(() => {
+    const syncFromServer = async () => {
+      const data = await fetchSharedContent();
+      if (!data) return;
+
+      if (data.heroData) {
+        setHeroData(data.heroData);
+        localStorage.setItem('pgri_hero_data', JSON.stringify(data.heroData));
+      }
+      if (data.organizationData) {
+        setOrganizationData(data.organizationData);
+        localStorage.setItem('pgri_org_data', JSON.stringify(data.organizationData));
+      }
+      if (data.saktiArticles && data.saktiArticles.length > 0) {
+        setSaktiArticles(data.saktiArticles);
+        localStorage.setItem('pgri_sakti_data', JSON.stringify(data.saktiArticles));
+      }
+      if (data.starPractices && data.starPractices.length > 0) {
+        setStarPractices(data.starPractices);
+        localStorage.setItem('pgri_star_data', JSON.stringify(data.starPractices));
+      }
+      if (data.rantingList && data.rantingList.length > 0) {
+        setRantingList(data.rantingList);
+        localStorage.setItem('pgri_ranting_data', JSON.stringify(data.rantingList));
+      }
+      if (data.pengurusList && data.pengurusList.length > 0) {
+        setPengurusList(data.pengurusList);
+        localStorage.setItem('pgri_pengurus_data', JSON.stringify(data.pengurusList));
+      }
+      if (data.komunitasActivities && data.komunitasActivities.length > 0) {
+        setKomunitasActivities(data.komunitasActivities);
+        localStorage.setItem('pgri_komunitas_data', JSON.stringify(data.komunitasActivities));
+      }
+      if (data.contributorTeachers && data.contributorTeachers.length > 0) {
+        setContributorTeachers(data.contributorTeachers);
+        localStorage.setItem('pgri_teachers_data', JSON.stringify(data.contributorTeachers));
+      }
+      if (data.galleryItems && data.galleryItems.length > 0) {
+        setGalleryItems(data.galleryItems);
+        localStorage.setItem('pgri_gallery_data', JSON.stringify(data.galleryItems));
+      }
+      if (data.contactInfo) {
+        setContactInfo(data.contactInfo);
+        localStorage.setItem('pgri_contact_data', JSON.stringify(data.contactInfo));
+      }
+      if (data.messages) {
+        setMessages(data.messages);
+        localStorage.setItem('pgri_messages_data', JSON.stringify(data.messages));
+      }
+    };
+
+    // Run immediately on page load
+    syncFromServer();
+
+    // Re-sync whenever tab or browser window gains focus
+    window.addEventListener('focus', syncFromServer);
+
+    // Periodic sync every 15 seconds to catch updates from other devices automatically
+    const interval = setInterval(syncFromServer, 15000);
+
+    return () => {
+      window.removeEventListener('focus', syncFromServer);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Global hotkeys: '/' for search, Alt+A for admin panel
   useEffect(() => {

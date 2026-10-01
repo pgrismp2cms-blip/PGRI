@@ -637,6 +637,7 @@ export const DEFAULT_HERO_DATA: HeroContent = {
   statsPilar: '4 Pilar',
   headerLogo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Logo_PGRI.png/480px-Logo_PGRI.png',
   headerLogoSecondary: '',
+  heroBanner: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
 };
 
 export const DEFAULT_ORGANIZATION_DATA = {
@@ -691,5 +692,6 @@ export const DEFAULT_CONTACT_INFO: ContactInfo = {
   secretaryHead: 'Drs. H. Asep Wahyudin, M.Pd.',
   secretaryHeadTitle: 'Ketua Ranting PGRI SMPN 2 Ciamis',
   mapEmbedUrl: 'https://maps.google.com/?q=-7.3275,108.3542',
+  officePhoto: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
 };
 

@@ -82,6 +82,7 @@ export interface RantingSchool {
   website?: string;
   profileUrl?: string;
   description?: string;
+  image?: string;
 }
 
 export interface KomunitasActivity {
@@ -129,6 +130,7 @@ export interface HeroContent {
   statsPilar: string;
   headerLogo?: string;
   headerLogoSecondary?: string;
+  heroBanner?: string;
 }
 
 export interface ContactMessage {
@@ -156,5 +158,6 @@ export interface ContactInfo {
   secretaryHead: string;
   secretaryHeadTitle: string;
   mapEmbedUrl?: string;
+  officePhoto?: string;
 }
 
