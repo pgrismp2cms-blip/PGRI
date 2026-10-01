@@ -167,18 +167,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>Eksplor SAKTI</span>
               </button>
 
-              {/* Admin Button (Desktop & Tablet) */}
-              {onOpenAdmin && (
-                <button
-                  onClick={onOpenAdmin}
-                  className="hidden md:flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-red-50 hover:text-red-700 hover:border-red-300 border border-neutral-300 rounded-lg transition-colors whitespace-nowrap shadow-xs"
-                  title="Panel Pengelola Konten (CMS)"
-                >
-                  <Shield className="w-3.5 h-3.5 text-red-700" />
-                  <span>Menu Admin</span>
-                </button>
-              )}
-
               {/* Mobile Hamburger Toggle (HANYA MUNCUL DI TAMPILAN HP: md:hidden) */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -193,10 +181,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* DEDICATED NAVIGATION BAR: TAMPIL DI DESKTOP & TABLET, POSISI CENTER & RATA KANAN KIRI */}
+      {/* DEDICATED NAVIGATION BAR: TAMPIL DI DESKTOP & TABLET (SCROLLABLE DI TABLET, CENTERED DI DESKTOP) */}
       <div className="hidden md:block bg-neutral-50/95 border-b border-neutral-200 relative z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center justify-center space-x-1 md:space-x-1.5 lg:space-x-3 py-2 text-xs sm:text-sm font-medium text-neutral-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto lg:overflow-x-visible scrollbar-none scroll-smooth">
+          <nav className="flex items-center md:justify-start lg:justify-center min-w-max mx-auto space-x-1 md:space-x-1.5 lg:space-x-3 py-2 text-xs sm:text-sm font-medium text-neutral-700">
             {/* 1. Beranda */}
             <button
               onClick={() => handleLinkClick('beranda')}
@@ -235,7 +223,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
 
               {profilDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-64 bg-white rounded-xl shadow-2xl border border-neutral-200 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute top-full left-0 lg:left-1/2 lg:-translate-x-1/2 mt-1 w-64 bg-white rounded-xl shadow-2xl border border-neutral-200 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-neutral-400">
                     Menu & Informasi Profil
                   </div>
@@ -345,7 +333,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
 
               {saktiDropdownOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-72 bg-white rounded-xl shadow-2xl border border-neutral-200 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute top-full left-0 lg:left-1/2 lg:-translate-x-1/2 mt-1 w-72 bg-white rounded-xl shadow-2xl border border-neutral-200 py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-neutral-400">
                     Pilar Transformasi SAKTI
                   </div>
