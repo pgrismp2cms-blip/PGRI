@@ -78,12 +78,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </div>
           <div className="flex items-center space-x-3 text-red-100 text-[11px] shrink-0">
-            <span className="hidden md:inline">Membangun Ekosistem Digital Ciamis Tangguh</span>
-            <span className="hidden md:inline">·</span>
+            <span className="hidden lg:inline">Membangun Ekosistem Digital Ciamis Tangguh</span>
+            <span className="hidden lg:inline">·</span>
             {onOpenAdmin && (
               <button
                 onClick={onOpenAdmin}
-                className="bg-white/20 hover:bg-white/30 text-white px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider flex items-center space-x-1 transition-colors"
+                className="hidden lg:flex bg-white/20 hover:bg-white/30 text-white px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider items-center space-x-1 transition-colors"
                 title="Panel Pengelola Konten (CMS)"
               >
                 <Shield className="w-3 h-3" />
@@ -158,19 +158,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </kbd>
               </button>
 
-              {/* Primary Action Button (Desktop & Tablet) */}
+              {/* Primary Action Button (Desktop Only: lg:flex) */}
               <button
                 onClick={() => handleLinkClick('sakti')}
-                className="hidden md:flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-red-700 hover:bg-red-800 rounded-lg shadow-xs transition-colors whitespace-nowrap"
+                className="hidden lg:flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-red-700 hover:bg-red-800 rounded-lg shadow-xs transition-colors whitespace-nowrap"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Eksplor SAKTI</span>
               </button>
 
-              {/* Mobile Hamburger Toggle (HANYA MUNCUL DI TAMPILAN HP: md:hidden) */}
+              {/* Hamburger Toggle (TAMPIL DI TAMPILAN HP & TABLET: lg:hidden) */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-600"
+                className="lg:hidden p-2 text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-600"
                 aria-label="Buka menu navigasi"
                 title={mobileMenuOpen ? 'Tutup menu' : 'Buka menu'}
               >
@@ -181,10 +181,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* DEDICATED NAVIGATION BAR: TAMPIL DI DESKTOP & TABLET (SCROLLABLE DI TABLET, CENTERED DI DESKTOP) */}
-      <div className="hidden md:block bg-neutral-50/95 border-b border-neutral-200 relative z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto lg:overflow-x-visible scrollbar-none scroll-smooth">
-          <nav className="flex items-center md:justify-start lg:justify-center min-w-max mx-auto space-x-1 md:space-x-1.5 lg:space-x-3 py-2 text-xs sm:text-sm font-medium text-neutral-700">
+      {/* DEDICATED NAVIGATION BAR: HANYA TAMPIL DI DESKTOP (lg:block), PADA HP & TABLET MENGGUNAKAN HAMBURGER MENU */}
+      <div className="hidden lg:block bg-neutral-50/95 border-b border-neutral-200 relative z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex items-center justify-center min-w-max mx-auto space-x-2 xl:space-x-3 py-2 text-xs sm:text-sm font-medium text-neutral-700">
             {/* 1. Beranda */}
             <button
               onClick={() => handleLinkClick('beranda')}
@@ -456,13 +456,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
         </div>
-        {/* Brand Accent Line: Merah Putih Hitam - Freeze bersama Header */}
-        <div className="h-1 bg-gradient-to-r from-red-700 via-neutral-900 to-red-800 shadow-xs" />
       </div>
 
-      {/* Mobile Drawer Navigation (HANYA DITAMPILKAN KETIKA HAMBURGER DIBUKA DI HP) */}
+      {/* Brand Accent Line: Merah Putih Hitam - Freeze bersama Header (Tampil di Semua Layar: Desktop, Tablet, & HP) */}
+      <div className="h-1 bg-gradient-to-r from-red-700 via-neutral-900 to-red-800 shadow-xs" />
+
+      {/* Mobile & Tablet Drawer Navigation (TAMPIL KETIKA HAMBURGER DIBUKA DI HP & TABLET: lg:hidden) */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-neutral-200 bg-white px-4 pt-3 pb-6 space-y-3 max-h-[85vh] overflow-y-auto animate-in fade-in">
+        <div className="lg:hidden border-t border-neutral-200 bg-white px-4 sm:px-6 pt-3 pb-6 space-y-3 max-h-[85vh] overflow-y-auto animate-in fade-in">
           <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
             <span className="text-xs font-bold uppercase tracking-wider text-red-700">
               Navigasi Utama PGRI Ciamis
@@ -470,7 +471,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="text-[11px] text-neutral-400">Aturan 3-Klik</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 text-xs font-medium">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-medium">
             <button
               onClick={() => handleLinkClick('beranda')}
               className="p-2.5 text-left bg-neutral-50 hover:bg-red-50 hover:text-red-700 rounded-lg border border-neutral-200 transition-colors flex items-center space-x-2"
