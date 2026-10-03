@@ -45,6 +45,10 @@ import {
   saveSharedContent,
   resetSharedContent,
 } from './utils/contentSync';
+import {
+  saveSectionToFirestore,
+  subscribeToAllAppContent,
+} from './firebase';
 
 function getSaved<T>(key: string, fallback: T): T {
   try {
@@ -102,67 +106,79 @@ export default function App() {
   const [starModalPractice, setStarModalPractice] = useState<StarPractice | null>(null);
   const [galleryModalItem, setGalleryModalItem] = useState<GalleryItem | null>(null);
 
-  // Persistence & Server-Sync helpers (updates local storage and broadcasts to server for all devices)
+  // Persistence & Multi-Device Sync helpers (updates local storage, Express server, and Firestore real-time cloud)
   const setHeroDataWithPersist = (data: HeroContent) => {
     setHeroData(data);
     localStorage.setItem('pgri_hero_data', JSON.stringify(data));
     saveSharedContent({ heroData: data });
+    saveSectionToFirestore('hero', data);
   };
   const setSaktiWithPersist = (articles: SaktiContent[]) => {
     setSaktiArticles(articles);
     localStorage.setItem('pgri_sakti_data', JSON.stringify(articles));
     saveSharedContent({ saktiArticles: articles });
+    saveSectionToFirestore('sakti', articles);
   };
   const setStarWithPersist = (practices: StarPractice[]) => {
     setStarPractices(practices);
     localStorage.setItem('pgri_star_data', JSON.stringify(practices));
     saveSharedContent({ starPractices: practices });
+    saveSectionToFirestore('star', practices);
   };
   const setRantingWithPersist = (schools: RantingSchool[]) => {
     setRantingList(schools);
     localStorage.setItem('pgri_ranting_data', JSON.stringify(schools));
     saveSharedContent({ rantingList: schools });
+    saveSectionToFirestore('ranting', schools);
   };
   const setPengurusWithPersist = (pengurus: PengurusItem[]) => {
     setPengurusList(pengurus);
     localStorage.setItem('pgri_pengurus_data', JSON.stringify(pengurus));
     saveSharedContent({ pengurusList: pengurus });
+    saveSectionToFirestore('pengurus', pengurus);
   };
   const setKomunitasWithPersist = (activities: KomunitasActivity[]) => {
     setKomunitasActivities(activities);
     localStorage.setItem('pgri_komunitas_data', JSON.stringify(activities));
     saveSharedContent({ komunitasActivities: activities });
+    saveSectionToFirestore('komunitas', activities);
   };
   const setContributorsWithPersist = (teachers: ContributorTeacher[]) => {
     setContributorTeachers(teachers);
     localStorage.setItem('pgri_teachers_data', JSON.stringify(teachers));
     saveSharedContent({ contributorTeachers: teachers });
+    saveSectionToFirestore('contributors', teachers);
   };
   const setGalleryWithPersist = (items: GalleryItem[]) => {
     setGalleryItems(items);
     localStorage.setItem('pgri_gallery_data', JSON.stringify(items));
     saveSharedContent({ galleryItems: items });
+    saveSectionToFirestore('gallery', items);
   };
   const setOrgWithPersist = (data: { sejarah: string; visi: string; misi: string[] }) => {
     setOrganizationData(data);
     localStorage.setItem('pgri_org_data', JSON.stringify(data));
     saveSharedContent({ organizationData: data });
+    saveSectionToFirestore('organization', data);
   };
   const setContactWithPersist = (info: ContactInfo) => {
     setContactInfo(info);
     localStorage.setItem('pgri_contact_data', JSON.stringify(info));
     saveSharedContent({ contactInfo: info });
+    saveSectionToFirestore('contact', info);
   };
   const setMessagesWithPersist = (msgs: ContactMessage[]) => {
     setMessages(msgs);
     localStorage.setItem('pgri_messages_data', JSON.stringify(msgs));
     saveSharedContent({ messages: msgs });
+    saveSectionToFirestore('messages', msgs);
   };
   const handleNewMessage = (msg: ContactMessage) => {
     const updated = [msg, ...messages];
     setMessages(updated);
     localStorage.setItem('pgri_messages_data', JSON.stringify(updated));
     saveSharedContent({ messages: updated });
+    saveSectionToFirestore('messages', updated);
   };
 
   const handleResetAllData = () => {
@@ -193,8 +209,48 @@ export default function App() {
     resetSharedContent();
   };
 
-  // Cross-device synchronization: Fetch server content on mount, focus, and every 15 seconds
+  // Cross-device synchronization: Listen to Firestore real-time updates + Server polling
   useEffect(() => {
+    // 1. Live Real-time Firestore Cloud Subscription (Instantly syncs to all devices & browsers)
+    const unsubscribeFirestore = subscribeToAllAppContent((sectionId, data) => {
+      if (!data) return;
+      if (sectionId === 'hero') {
+        setHeroData(data);
+        localStorage.setItem('pgri_hero_data', JSON.stringify(data));
+      } else if (sectionId === 'organization') {
+        setOrganizationData(data);
+        localStorage.setItem('pgri_org_data', JSON.stringify(data));
+      } else if (sectionId === 'sakti' && Array.isArray(data)) {
+        setSaktiArticles(data);
+        localStorage.setItem('pgri_sakti_data', JSON.stringify(data));
+      } else if (sectionId === 'star' && Array.isArray(data)) {
+        setStarPractices(data);
+        localStorage.setItem('pgri_star_data', JSON.stringify(data));
+      } else if (sectionId === 'ranting' && Array.isArray(data)) {
+        setRantingList(data);
+        localStorage.setItem('pgri_ranting_data', JSON.stringify(data));
+      } else if (sectionId === 'pengurus' && Array.isArray(data)) {
+        setPengurusList(data);
+        localStorage.setItem('pgri_pengurus_data', JSON.stringify(data));
+      } else if (sectionId === 'komunitas' && Array.isArray(data)) {
+        setKomunitasActivities(data);
+        localStorage.setItem('pgri_komunitas_data', JSON.stringify(data));
+      } else if (sectionId === 'contributors' && Array.isArray(data)) {
+        setContributorTeachers(data);
+        localStorage.setItem('pgri_teachers_data', JSON.stringify(data));
+      } else if (sectionId === 'gallery' && Array.isArray(data)) {
+        setGalleryItems(data);
+        localStorage.setItem('pgri_gallery_data', JSON.stringify(data));
+      } else if (sectionId === 'contact') {
+        setContactInfo(data);
+        localStorage.setItem('pgri_contact_data', JSON.stringify(data));
+      } else if (sectionId === 'messages' && Array.isArray(data)) {
+        setMessages(data);
+        localStorage.setItem('pgri_messages_data', JSON.stringify(data));
+      }
+    });
+
+    // 2. Fallback polling from server endpoint
     const syncFromServer = async () => {
       const data = await fetchSharedContent();
       if (!data) return;
@@ -255,6 +311,7 @@ export default function App() {
     const interval = setInterval(syncFromServer, 15000);
 
     return () => {
+      unsubscribeFirestore();
       window.removeEventListener('focus', syncFromServer);
       clearInterval(interval);
     };

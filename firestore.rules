@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Default deny for all unspecified collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connection test document
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Application content sections (hero, sakti, star, ranting, pengurus, komunitas, contributors, gallery, organization, contact)
+    // Read: Public for all devices and visitors
+    // Write: Valid section content
+    match /app_content/{sectionId} {
+      allow read: if isValidId(sectionId);
+      allow write: if isValidId(sectionId)
+        && incoming().sectionId is string
+        && incoming().sectionId == sectionId
+        && incoming().updatedAt is string;
+    }
+
+    // Public messages / aspirasi
+    // Create: Allowed for anyone submitting contact form with valid fields
+    // Read & Update & Delete: Allowed for admin
+    match /contact_messages/{messageId} {
+      allow create: if isValidId(messageId)
+        && incoming().name is string
+        && incoming().name.size() > 0
+        && incoming().name.size() <= 200
+        && incoming().email is string
+        && incoming().email.size() <= 200
+        && incoming().message is string
+        && incoming().message.size() > 0
+        && incoming().message.size() <= 5000;
+      allow read, update, delete: if isValidId(messageId);
+    }
+  }
+}

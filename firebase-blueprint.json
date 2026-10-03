@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "AppContent": {
+      "title": "AppContent",
+      "description": "Shared application content section document",
+      "type": "object",
+      "properties": {
+        "sectionId": {
+          "type": "string",
+          "description": "Identifier for the section (hero, sakti, star, ranting, pengurus, komunitas, contributors, gallery, organization, contact)"
+        },
+        "data": {
+          "type": "object",
+          "description": "JSON payload containing content and static images for this section"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Identifier of updater"
+        }
+      },
+      "required": ["sectionId", "data", "updatedAt"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "Inbound message or aspiration from teachers/public",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Sender full name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Sender email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Sender phone number"
+        },
+        "school": {
+          "type": "string",
+          "description": "School or unit of sender"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Message topic"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message body"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Readable timestamp string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["baru", "diproses", "selesai"],
+          "description": "Processing status"
+        }
+      },
+      "required": ["name", "email", "message", "status"]
+    }
+  },
+  "firestore": {
+    "/app_content/{sectionId}": {
+      "schema": "AppContent",
+      "description": "Shared site content sections synchronized in real-time across all devices"
+    },
+    "/contact_messages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Messages and aspirations submitted through contact form"
+    }
+  }
+}
