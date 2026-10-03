@@ -222,7 +222,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="flex items-center space-x-3 text-neutral-400">
             <span>Standar Aksesibilitas WCAG AA</span>
             <span>·</span>
-            <span>Tatar Galuh Digital</span>
+            <span>Kab. Ciamis Digital</span>
           </div>
         </div>
       </div>

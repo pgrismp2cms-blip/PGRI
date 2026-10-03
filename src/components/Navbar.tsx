@@ -138,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   PGRI Ranting SMPN 2 Ciamis
                 </span>
                 <span className="block text-[10px] sm:text-xs text-neutral-500 font-medium tracking-normal leading-tight">
-                  Cabang Kecamatan Ciamis · Tatar Galuh
+                  Cabang Kecamatan Ciamis · Kab. Ciamis
                 </span>
               </div>
             </button>
@@ -245,7 +245,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <BookOpen className="w-4 h-4 text-red-600 shrink-0" />
                     <div>
                       <div className="font-semibold text-neutral-900">Sejarah PGRI Ciamis</div>
-                      <div className="text-[10px] text-neutral-500">Kilas jejak guru Tatar Galuh</div>
+                      <div className="text-[10px] text-neutral-500">Kilas jejak guru Kab. Ciamis</div>
                     </div>
                   </button>
                   <button

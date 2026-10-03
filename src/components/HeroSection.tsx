@@ -31,7 +31,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span aria-hidden="true">·</span>
               <span>Ranting SMPN 2 Ciamis</span>
               <span aria-hidden="true">·</span>
-              <span className="text-emerald-700 font-medium">Tatar Galuh</span>
+              <span className="text-emerald-700 font-medium">Kab. Ciamis</span>
             </div>
 
             {/* Main Headline (Theme: Membangun Ekosistem Digital Ciamis Tangguh) */}
