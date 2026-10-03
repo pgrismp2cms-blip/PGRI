@@ -26,10 +26,11 @@ service cloud.firestore {
     }
 
     // Application content sections (hero, sakti, star, ranting, pengurus, komunitas, contributors, gallery, organization, contact)
-    // Read: Public for all devices and visitors
+    // Read: Public for all devices and visitors (single document and collection list query)
     // Write: Valid section content
     match /app_content/{sectionId} {
-      allow read: if isValidId(sectionId);
+      allow get: if isValidId(sectionId);
+      allow list: if true;
       allow write: if isValidId(sectionId)
         && incoming().sectionId is string
         && incoming().sectionId == sectionId
@@ -38,7 +39,7 @@ service cloud.firestore {
 
     // Public messages / aspirasi
     // Create: Allowed for anyone submitting contact form with valid fields
-    // Read & Update & Delete: Allowed for admin
+    // Read & Update & Delete: Allowed for admin & management
     match /contact_messages/{messageId} {
       allow create: if isValidId(messageId)
         && incoming().name is string
@@ -49,7 +50,9 @@ service cloud.firestore {
         && incoming().message is string
         && incoming().message.size() > 0
         && incoming().message.size() <= 5000;
-      allow read, update, delete: if isValidId(messageId);
+      allow get: if isValidId(messageId);
+      allow list: if true;
+      allow update, delete: if isValidId(messageId);
     }
   }
 }

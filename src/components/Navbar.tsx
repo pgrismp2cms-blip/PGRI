@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Logo & Brand Wordmark */}
             <button
               onClick={() => handleLinkClick('beranda')}
-              className="flex items-center space-x-2.5 sm:space-x-3 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 rounded p-1 transition-transform"
+              className="flex items-center space-x-2 sm:space-x-3 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 rounded p-1 transition-transform min-w-0"
             >
               {/* Dynamic / Custom Uploaded Header Logo */}
               <div className="flex items-center space-x-2 shrink-0">
@@ -133,11 +133,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               {/* Text Identity */}
-              <div className="leading-tight">
-                <span className="block font-extrabold text-base sm:text-lg lg:text-xl text-neutral-900 tracking-tight group-hover:text-red-700 transition-colors">
+              <div className="leading-tight min-w-0">
+                <span className="block font-bold sm:font-extrabold text-[13px] sm:text-lg lg:text-xl text-neutral-900 tracking-tight group-hover:text-red-700 transition-colors leading-snug sm:leading-tight">
                   PGRI Ranting SMPN 2 Ciamis
                 </span>
-                <span className="block text-[11px] sm:text-xs text-neutral-500 font-medium">
+                <span className="block text-[10px] sm:text-xs text-neutral-500 font-medium tracking-normal leading-tight">
                   Cabang Kecamatan Ciamis · Tatar Galuh
                 </span>
               </div>
